@@ -47,7 +47,7 @@ Issues = "https://github.com/sscovil/python-dev-cli/issues"
 Changelog = "https://github.com/sscovil/python-dev-cli/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
-dev = ["black", "build", "pip-tools", "pre-commit", "ruff"]
+dev = ["black", "build", "pip-tools", "pre-commit", "ruff", "twine"]
 
 [tool.black]
 exclude = "venv"
