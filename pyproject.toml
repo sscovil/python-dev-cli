@@ -1,0 +1,90 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "python-dev-cli"
+version = "1.0.0"
+description = "Python developer CLI for running custom scripts defined in pyproject.toml"
+authors = [{ name = "Shaun Scovil", email = "sscovil@pythondevcli.io" }]
+readme = "README.md"
+license = { text = "BSD" }
+requires-python = ">=3.11"
+keywords = ["python", "dev", "cli", "scripts", "pyproject.toml", "automation"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3 :: Only",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Build Tools",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Software Development :: Testing",
+    "Topic :: System :: Systems Administration",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
+dependencies = ["jinja2"]
+
+[project.scripts]
+dev = "python_dev_cli.cli:dev_cli"
+
+[project.urls]
+Homepage = "https://pythondevcli.io/"
+Documentation = "https://github.com/sscovil/python-dev-cli/blob/main/README.md"
+Repository = "https://github.com/sscovil/python-dev-cli"
+Issues = "https://github.com/sscovil/python-dev-cli/issues"
+Changelog = "https://github.com/sscovil/python-dev-cli/blob/main/CHANGELOG.md"
+
+[project.optional-dependencies]
+dev = ["black", "build", "pip-tools", "pre-commit", "ruff"]
+
+[tool.black]
+exclude = "venv"
+line-length = 120
+
+[tool.python-dev-cli.settings]
+enable_templates = true
+include = ["os"]
+
+[tool.python-dev-cli.scripts]
+black = "black --check --config pyproject.toml ."
+black_fix = "black --config pyproject.toml ."
+build = "python3 -m build"
+clean = "rm -rf build dist"
+clean_build = ["clean", "build"]
+compile = "pip-compile -o requirements.txt pyproject.toml"
+compile_dev = "pip-compile -o requirements-dev.txt --extra dev pyproject.toml"
+install_editable = "python3 -m pip install -e ."
+lint = ["black", "ruff"]
+lint_fix = ["black_fix", "ruff_fix"]
+ruff = "ruff --config pyproject.toml ."
+ruff_fix = "ruff --fix --exit-non-zero-on-fix --config pyproject.toml ."
+sync = ["sync_dev", "install_editable"]
+sync_dev = "pip-sync requirements-dev.txt"
+test = "python3 -m unittest discover test *_test.py --locals -bcf"
+test_install = "python3 -m pip install --upgrade --index-url https://test.pypi.org/simple/ --no-deps --no-cache-dir python-dev-cli"
+test_upload = "python3 -m twine upload --skip-existing --repository testpypi dist/*"
+upload = "python3 -m twine upload --skip-existing dist/*"
+
+[tool.pip-tools]
+allow-unsafe = true
+generate-hashes = true
+strip-extras = true
+
+[tool.ruff]
+line-length = 120
+exclude = ["venv"]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
