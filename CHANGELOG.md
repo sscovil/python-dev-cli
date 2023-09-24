@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to
 [Semantic Versioning](http://semver.org/).
 
+## [1.0.2] - 2023-09-24
+
+### Fixed
+
+- Issue with `_version.py` causing lint to fail during GitHub Actions publish workflow
+
 ## [1.0.1] - 2023-09-24
 
 ### Added
