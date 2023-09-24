@@ -1,16 +1,16 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools >=65", "setuptools_scm[toml] >=8.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "python-dev-cli"
-version = "1.0.0"
+dynamic = ["version"]
 description = "Python developer CLI for running custom scripts defined in pyproject.toml"
-authors = [{ name = "Shaun Scovil", email = "sscovil@pythondevcli.io" }]
+authors = [{name = "Shaun Scovil", email = "sscovil@pythondevcli.io"}]
 readme = "README.md"
-license = { text = "BSD" }
+license = {text = "BSD"}
 requires-python = ">=3.11"
-keywords = ["python", "dev", "cli", "scripts", "pyproject.toml", "automation"]
+keywords = ["dev", "cli", "scripts", "automation", "config", "pyproject.toml"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
@@ -34,7 +34,7 @@ classifiers = [
     "Topic :: Utilities",
     "Typing :: Typed",
 ]
-dependencies = ["jinja2"]
+dependencies = ["jinja2 ~=3.1.2"]
 
 [project.scripts]
 dev = "python_dev_cli.cli:dev_cli"
@@ -47,7 +47,7 @@ Issues = "https://github.com/sscovil/python-dev-cli/issues"
 Changelog = "https://github.com/sscovil/python-dev-cli/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
-dev = ["black", "build", "pip-tools", "pre-commit", "ruff", "twine"]
+dev = ["black ~=23.9.1", "build ~=1.0.3", "pre-commit ~=3.4.0", "ruff ~=0.0.291", "twine ~=4.0.2"]
 
 [tool.black]
 exclude = "venv"
@@ -60,22 +60,18 @@ include = ["os"]
 [tool.python-dev-cli.scripts]
 black = "black --check --config pyproject.toml ."
 black_fix = "black --config pyproject.toml ."
-build = "python3 -m build"
+build = "python3 -m build --sdist --wheel"
 clean = "rm -rf build dist"
 clean_build = ["clean", "build"]
-compile = "pip-compile -o requirements.txt pyproject.toml"
-compile_dev = "pip-compile -o requirements-dev.txt --extra dev pyproject.toml"
-install_editable = "python3 -m pip install -e ."
+install = "python3 -m pip install -e \".[dev]\""
+install_test = "python3 -m pip install --upgrade --index-url https://test.pypi.org/simple/ --no-deps --no-cache-dir python-dev-cli"
 lint = ["black", "ruff"]
 lint_fix = ["black_fix", "ruff_fix"]
 ruff = "ruff --config pyproject.toml ."
 ruff_fix = "ruff --fix --exit-non-zero-on-fix --config pyproject.toml ."
-sync = ["sync_dev", "install_editable"]
-sync_dev = "pip-sync requirements-dev.txt"
 test = "python3 -m unittest discover test *_test.py --locals -bcf"
-test_install = "python3 -m pip install --upgrade --index-url https://test.pypi.org/simple/ --no-deps --no-cache-dir python-dev-cli"
-test_upload = "python3 -m twine upload --skip-existing --repository testpypi dist/*"
 upload = "python3 -m twine upload --skip-existing dist/*"
+upload_test = "python3 -m twine upload --skip-existing --repository testpypi dist/*"
 
 [tool.pip-tools]
 allow-unsafe = true
@@ -87,4 +83,7 @@ line-length = 120
 exclude = ["venv"]
 
 [tool.setuptools]
-package-dir = { "" = "src" }
+package-dir = {"" = "src"}
+
+[tool.setuptools_scm]
+write_to = "src/python_dev_cli/_version.py"

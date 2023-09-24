@@ -1,5 +1,11 @@
 # Python Developer CLI
 
+![PyPI - Version](https://img.shields.io/pypi/v/python-dev-cli)
+![PyPI - License](https://img.shields.io/pypi/l/python-dev-cli)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/python-dev-cli)
+![GitHub issues](https://img.shields.io/github/issues/sscovil/python-dev-cli?link=https%3A%2F%2Fgithub.com%2Fsscovil%2Fpython-dev-cli%2Fissues)
+![GitHub issues by-label](https://img.shields.io/github/issues/sscovil/python-dev-cli/bug?link=https%3A%2F%2Fgithub.com%2Fsscovil%2Fpython-dev-cli%2Flabels%2Fbug)
+
 Python developer CLI enables you to run custom scripts defined in your [pyproject.toml] file, eliminating the need for
 shell scripts and Makefiles, and reducing extraneous cognitive load on your teammates and contributors.
 
@@ -128,7 +134,7 @@ dev other_scripts
 # foobar
 ```
 
-Script template functionality can be disabled, if you prefer to keep things simple. See the [Settings](#settings)
+Script template functionality can be disabled, if you prefer to keep things simple. See the [Settings]
 section below for more information.
 
 ## Settings
@@ -340,4 +346,5 @@ page.
 [Contributor Covenant]: https://contributor-covenant.org/
 [Jinja2]: https://jinja.palletsprojects.com/en/3.0.x/
 [pyproject.toml]: https://peps.python.org/pep-0518/#tool-table
+[Settings]: https://github.com/sscovil/python-dev-cli/blob/main/README.md#settings
 [subprocess.run()]: https://docs.python.org/3/library/subprocess.html#subprocess.run

@@ -3,10 +3,10 @@
 
 First off, thanks for taking the time to contribute! ❤️
 
-All types of contributions are encouraged and valued. See the [Table of Contents](#table-of-contents) for different ways
-to help and details about how this project handles them. Please make sure to read the relevant section before making
-your contribution. It will make it a lot easier for us maintainers and smooth out the experience for all involved. The
-community looks forward to your contributions. 🎉
+All types of contributions are encouraged and valued. See the [Table of Contents] for different ways to help and details
+about how this project handles them. Please make sure to read the relevant section before making your contribution. It
+will make it a lot easier for us maintainers and smooth out the experience for all involved. The community looks forward
+to your contributions. 🎉
 
 > And if you like the project, but just don't have time to contribute, that's fine. There are other easy ways to support
 the project and show your appreciation, which we would also be very happy about:
@@ -18,15 +18,15 @@ the project and show your appreciation, which we would also be very happy about:
 <!-- omit in toc -->
 ## Table of Contents
 
-- [Code of Conduct](#code-of-conduct)
-- [I Have a Question](#i-have-a-question)
-- [I Want To Contribute](#i-want-to-contribute)
-    - [Reporting Bugs](#reporting-bugs)
-    - [Suggesting Enhancements](#suggesting-enhancements)
-    - [Your First Code Contribution](#your-first-code-contribution)
-    - [Improving The Documentation](#improving-the-documentation)
-- [Styleguide](#styleguide)
-    - [Commit Messages](#commit-messages)
+- [Code of Conduct]
+- [I Have a Question]
+- [I Want To Contribute]
+    - [Reporting Bugs]
+    - [Suggesting Enhancements]
+    - [Your First Code Contribution]
+    - [Improving The Documentation]
+- [Styleguide]
+    - [Commit Messages]
 
 ## Code of Conduct
 
@@ -104,7 +104,7 @@ Once it's filed:
 obvious way to reproduce the issue, the team will ask you for those steps and mark the issue as `needs-repro`. Bugs with
 the `needs-repro` tag will not be addressed until they are reproduced.
 - If the team is able to reproduce the issue, it will be marked `needs-fix`, as well as possibly other tags (such as
-`critical`), and the issue will be left to be [implemented by someone](#your-first-code-contribution).
+`critical`), and the issue will be left to be [implemented by someone].
 
 ### Suggesting Enhancements
 
@@ -118,7 +118,7 @@ the community to understand your suggestion and find related suggestions.
 - Make sure that you are using the latest version.
 - Read the [documentation] carefully and find out if the functionality is already covered, maybe by an individual
 configuration.
-- Perform a [search] to see if the enhancement has already been suggested. If it has, add a comment to the existing
+- Search [Discussions] to see if the enhancement has already been suggested. If it has, add a comment to the existing
 issue instead of opening a new one.
 - Find out whether your idea fits with the scope and aims of the project. It's up to you to make a strong case to
 convince the project's developers of the merits of this feature. Keep in mind that we want features that will be useful
@@ -128,9 +128,9 @@ an add-on/plugin library.
 <!-- omit in toc -->
 #### How Do I Submit a Good Enhancement Suggestion?
 
-Enhancement suggestions are tracked as GitHub [issues].
+Enhancement suggestions are tracked as GitHub [Discussions].
 
-- Use a **clear and descriptive title** for the issue to identify the suggestion.
+- Use a **clear and descriptive title** to identify your suggestion.
 - Provide a **step-by-step description of the suggested enhancement** in as many details as possible.
 - **Describe the current behavior** and **explain which behavior you expected to see instead** and why. At this point
 you can also tell which alternatives do not work for you.
@@ -154,15 +154,12 @@ To get started, you'll need to clone the git repository and set up your local de
 2. Change to the project directory: `cd python-dev-cli`
 3. Create a virtual environment: `python -m venv venv`
 4. Activate the virtual environment: `source venv/bin/activate` (or `venv\Scripts\activate.bat` on Windows)
-5. Install dev dependencies: `pip install --no-deps -r requirements-dev.txt`
+5. Install dev dependencies: `pip install -e ".[dev]"`
 6. Install git pre-commit hooks: `pre-commit install`
-7. Install the `dev` CLI in editable mode: `pip install -e .`
-8. Run tests: `dev test`
+7. View available scripts: `dev -h`
 
-This project uses the `pyproject.toml` file and [pip-tools] to manage dependencies. Generally, you should avoid adding
-new dependencies to the project, but if it is necessary you should add it to the `pyproject.toml` file and then run
-`dev compile` to update the `requirements.txt` (or `dev compile_dev` to update the `requirements-dev.txt` file, if it is
-a dev dependency). You can then run `dev sync` to install the new dependency in your virtual environment.
+This project uses the `pyproject.toml` file to manage dependencies. Generally, you should avoid adding new dependencies
+to the project, but if it is necessary you should add them to the `pyproject.toml` file and then run `dev install`.
 
 ### Improving The Documentation
 
@@ -196,12 +193,23 @@ This guide is based on the **contributing-gen**. [Make your own](https://github.
 
 [Black]: https://black.readthedocs.io/en/stable/the_black_code_style/index.html
 [bug tracker]: https://github.com/sscovil/devissues?q=label%3Abug
+[Code of Conduct]: https://github.com/sscovil/python-dev-cli/blob/main/CONTRIBUTING.md#code-of-conduct
+[Commit Messages]: https://github.com/sscovil/python-dev-cli/blob/main/CONTRIBUTING.md#commit-messages
 [Conventional Commits]: https://www.conventionalcommits.org/en/v1.0.0/
+[Discussions]: https://github.com/sscovil/python-dev-cli/discussions
 [documentation]: https://github.com/sscovil/python-dev-cli/blob/main/README.md
 [GitHub flow]: https://docs.github.com/en/get-started/quickstart/github-flow
+[I Have a Question]: https://github.com/sscovil/python-dev-cli/blob/main/CONTRIBUTING.md#i-have-a-question
+[I Want To Contribute]: https://github.com/sscovil/python-dev-cli/blob/main/CONTRIBUTING.md#i-want-to-contribute
+[implemented by someone]: https://github.com/sscovil/python-dev-cli/blob/main/CONTRIBUTING.md#your-first-code-contribution
+[Improving The Documentation]: https://github.com/sscovil/python-dev-cli/blob/main/CONTRIBUTING.md#improving-the-documentation
 [issue]: https://github.com/sscovil/python-dev-cli/issues/new
 [issues]: https://github.com/sscovil/python-dev-cli/issues
 [pip-tools]: https://github.com/jazzband/pip-tools
 [Python Developer CLI Code of Conduct]: https://github.com/sscovil/devblob/master/CODE_OF_CONDUCT.md
+[Reporting Bugs]: https://github.com/sscovil/python-dev-cli/blob/main/CONTRIBUTING.md#reporting-bugs
 [Ruff]: https://docs.astral.sh/ruff/
-[search]: https://github.com/sscovil/python-dev-cli/issues
+[Table of Contents]: https://github.com/sscovil/python-dev-cli/blob/main/CONTRIBUTING.md#table-of-contents
+[Styleguide]: https://github.com/sscovil/python-dev-cli/blob/main/CONTRIBUTING.md#styleguide
+[Suggesting Enhancements]: https://github.com/sscovil/python-dev-cli/blob/main/CONTRIBUTING.md#suggesting-enhancements
+[Your First Code Contribution]: https://github.com/sscovil/python-dev-cli/blob/main/CONTRIBUTING.md#your-first-code-contribution
