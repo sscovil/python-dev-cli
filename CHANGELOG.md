@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to
 [Semantic Versioning](http://semver.org/).
 
+## [1.0.4] - 2023-09-25
+
+### Added
+
+- Separate tests into a different GitHub Actions workflow, for running tests on pull requests
+
+### Changed
+
+- Modify `publish` GitHub Actions workflow to only run on release, using PyPI trusted publishing
+- Modify `test` GitHub Actions workflow to test multiple operating systems and Python versions
+
+### Fixed
+
+- Add `_version.py` to `.gitignore` ensure `setuptools_scm` updates that file correctly
+
 ## [1.0.3] - 2023-09-24
 
 ### Fixed
