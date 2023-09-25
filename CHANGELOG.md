@@ -15,6 +15,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 - Modify `publish` GitHub Actions workflow to only run on release, using PyPI trusted publishing
 - Modify `test` GitHub Actions workflow to test multiple operating systems and Python versions
+- Modify `Scripts.run_script()` to not raise a `FileNotFoundError` if the script does not exist; instead, allow
+  `subprocess.run()` to raise a `CalledProcessError` if the script command fails to run.
 
 ### Fixed
 

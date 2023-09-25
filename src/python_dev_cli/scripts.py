@@ -115,30 +115,36 @@ class Scripts:
         the script is a template and templates are enabled, it is resolved and parsed, and the resulting list of script
         commands are run. Otherwise, the script is resolved and run as a list of unparsed commands.
 
+        If `check` is True and the exit code was non-zero, it raises a CalledProcessError. The CalledProcessError object
+        will have the return code in the `returncode` attribute, and output & stderr attributes if those streams were
+        captured. If `timeout` is given, and the process takes too long, a TimeoutExpired exception will be raised.
+
         :param script_key: The name of the script being run.
         :param kwargs: Additional keyword arguments to pass to subprocess.run().
         :return: A list of CompletedProcess instances; these are the return values of subprocess.run().
         :raises KeyError: If the script key is not found.
         :raises ScriptTemplateError: If an error occurs while parsing a script template.
-        :raises FileNotFoundError: If the executable for a script command is not found.
+        :raises CalledProcessError: If `check` is True and the exit code was non-zero.
+        :raises TimeoutExpired: If `timeout` is given, and the process takes too long.
         """
         output: List[CompletedProcess] = []
 
+        # By default, tell subprocess.run() to raise an exception if the script fails.
         if "check" not in kwargs:
-            kwargs["check"] = True  # By default, raise an exception if the script fails.
+            kwargs["check"] = True
 
         for script in self.get_script_command(script_key):
             # Split the script into a list of arguments, and replace the first argument with the full executable path.
             args: List[str] = shlex.split(script, posix=is_posix())
             executable: str = shutil.which(args[0])
-            args[0] = executable
 
-            # If the executable is found, run the script and print the output. Otherwise, raise an exception.
+            # If the executable is found, use the full path; otherwise, leave the first argument as-is.
             if executable:
-                logger.info(f"Running script [{script_key}]: {script}")
-                output.append(run(args, **kwargs))
-            else:
-                raise FileNotFoundError(f"Executable not found for script [{script_key}]: {script}")
+                args[0] = executable
+
+            # Run the script and append the result to the output list.
+            logger.info(f"Running script [{script_key}]: {script}")
+            output.append(run(args, **kwargs))
 
         return output
 
