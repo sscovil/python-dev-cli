@@ -47,7 +47,8 @@ Issues = "https://github.com/sscovil/python-dev-cli/issues"
 Changelog = "https://github.com/sscovil/python-dev-cli/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
-dev = ["black ~=23.9.1", "build ~=1.0.3", "pre-commit ~=3.4.0", "ruff ~=0.0.291", "twine ~=4.0.2"]
+dev = ["black ~=23.9.1", "pre-commit ~=3.4.0", "ruff ~=0.0.291"]
+publish = ["build ~=1.0.3", "twine ~=4.0.2"]
 
 [tool.black]
 extend-exclude = "_version.py"

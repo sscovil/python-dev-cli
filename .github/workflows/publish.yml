@@ -7,6 +7,7 @@ on:
 jobs:
   test:
     uses: sscovil/python-dev-cli/.github/workflows/test.yml@main
+
   publish:
     if: github.repository == 'sscovil/python-dev-cli'
     needs: [test]
@@ -18,5 +19,17 @@ jobs:
       id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
       - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - name: Build package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install ".[publish]"
+          python -m build --sdist --wheel .
       - name: Publish package
         uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip-existing: true  # Skip upload if package with same version already exists
+          verbose: true  # Print a lot of debugging information, for troubleshooting
