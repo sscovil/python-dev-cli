@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to
 [Semantic Versioning](http://semver.org/).
 
+## [1.1.0] - 2023-09-30
+
+### Added
+
+- Add `parse_help` setting, to disable parsing script templates in the `dev` CLI help page
+- Add `Template Parsing` subsection to the `Caveats` section of `README.md`
+- Add caching for `Scripts.context` property, to avoid rebuilding the context dictionary on every access
+
+### Changed
+
+- Modify `Scripts.__resolve()` to use `os.path.expandvars()` for parsing environment variables in script templates
+- Modify boolean property setters in `Settings` to correctly parse string values as booleans
+- Update `README.md` with new `parse_help` setting and information about parsing environment variables
+
+### Fixed
+
+- Raise `ModuleNotFoundError` when attempting to import a missing module, instead of raising `TypeError` 
+- Only raise an exception and show stack trace if `-d` or `--debug` flag is set in `dev` CLI
+
 ## [1.0.5] - 2023-09-25
 
 ### Fixed

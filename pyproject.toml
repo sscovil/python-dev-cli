@@ -54,10 +54,6 @@ publish = ["build ~=1.0.3", "twine ~=4.0.2"]
 extend-exclude = "_version.py"
 line-length = 120
 
-[tool.python-dev-cli.settings]
-enable_templates = true
-include = ["os"]
-
 [tool.python-dev-cli.scripts]
 black = "black --check --config pyproject.toml ."
 black_fix = "black --config pyproject.toml ."
@@ -73,6 +69,7 @@ ruff_fix = "ruff --fix --exit-non-zero-on-fix --config pyproject.toml ."
 test = "python3 -m unittest discover test *_test.py --locals -bcf"
 upload = "python3 -m twine upload --skip-existing dist/*"
 upload_test = "python3 -m twine upload --skip-existing --repository testpypi dist/*"
+env = "echo $FOO"
 
 [tool.pip-tools]
 allow-unsafe = true

@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 from src.python_dev_cli.scripts import Scripts
 
@@ -59,6 +59,16 @@ class TestScripts(unittest.TestCase):
         scripts["baz"] = ["foo", "bar"]
         self.assertEqual(len(scripts), 3)
 
+    def test_context(self, mock_settings):
+        settings = mock_settings()
+        key = settings.script_refs
+        scripts = Scripts(settings)
+        self.assertEqual(scripts._context, {str(key): {}})
+        scripts["foo"] = "echo foo"
+        self.assertEqual(scripts._context, {str(key): {"foo": "echo foo"}})
+        settings.include = ["os"]
+        self.assertTrue("os" in scripts._context.keys())
+
     @patch("src.python_dev_cli.settings.Settings.from_config", autospec=True)
     def test_from_config(self, mock_settings_from_config, mock_settings):
         mock_settings_from_config.return_value = mock_settings()
@@ -89,23 +99,73 @@ class TestScripts(unittest.TestCase):
         settings.include = ["os", "os:getenv", "uuid:uuid4 as uuid"]
         scripts = Scripts(settings)
         tests = [
-            ("text", "echo foo", ["echo foo"]),
-            ("python", "echo {{ 2 + 2 }}", ["echo 4"]),
-            ("list", ["text", "python"], ["echo foo", "echo 4"]),
-            ("getcwd", "echo {{ os.getcwd() }}", [f"echo {expected_cwd}"]),
-            ("getenv", "echo {{ os.getenv('HOME') }}", [f"echo {expected_home}"]),
-            ("uuid", "echo {{ uuid() }}", [f"echo {expected_uuid}"]),
+            {"key": "text", "value": "echo foo", "expected": ["echo foo"]},
+            {"key": "python", "value": "echo {{ 2 + 2 }}", "expected": ["echo 4"]},
+            {"key": "list", "value": ["text", "python"], "expected": ["echo foo", "echo 4"]},
+            {"key": "getcwd", "value": "echo {{ os.getcwd() }}", "expected": [f"echo {expected_cwd}"]},
+            {"key": "getenv", "value": "echo {{ os.getenv('HOME') }}", "expected": [f"echo {expected_home}"]},
+            {"key": "uuid", "value": "echo {{ uuid() }}", "expected": [f"echo {expected_uuid}"]},
         ]
-        for key, value, expected in tests:
-            with self.subTest(key=key, value=value, expected=expected):
-                scripts[key] = value
-                self.assertEqual(scripts.get_script_command(key), expected)
+        for test in tests:
+            with self.subTest(test=test):
+                scripts[test["key"]] = test["value"]
+                self.assertEqual(scripts.get_script_command(test["key"]), test["expected"])
 
     def test_get_script_command_invalid_key(self, mock_settings):
         settings = mock_settings()
         scripts = Scripts(settings)
         with self.assertRaises(KeyError):
             scripts.get_script_command("foo")
+
+    def test_get_script_command_templates_disabled(self, mock_settings):
+        settings = mock_settings()
+        settings.enable_templates = False
+        scripts = Scripts(settings)
+        scripts["foo"] = "echo {{ 2 + 2 }}"
+        self.assertEqual(scripts.get_script_command("foo"), ["echo {{ 2 + 2 }}"])
+
+    def test_get_script_command_no_parse(self, mock_settings):
+        settings = mock_settings()
+        scripts = Scripts(settings)
+        scripts["foo"] = "echo {{ 2 + 2 }}"
+        self.assertEqual(scripts.get_script_command("foo", parse=False), ["echo {{ 2 + 2 }}"])
+
+    @patch("uuid.uuid4", autospec=True)
+    def test_get_script_command_call_count(self, mock_uuid, mock_settings):
+        settings = mock_settings()
+        settings.include = ["uuid:uuid4 as uuid"]
+        scripts = Scripts(settings)
+        scripts["uuid"] = "echo {{ uuid() }}"
+        scripts["uuids"] = ["uuid", "uuid", "uuid"]
+        mock_uuid.assert_not_called()
+        tests = [
+            {"script": "uuid", "expected_call_count": 1},
+            {"script": "uuids", "expected_call_count": 3},
+        ]
+        for test in tests:
+            with self.subTest(test=test):
+                scripts.get_script_command(test["script"])
+                self.assertEqual(mock_uuid.call_count, test["expected_call_count"])
+                mock_uuid.reset_mock()
+
+    def test_get_script_help(self, mock_settings):
+        settings = mock_settings()
+        scripts = Scripts(settings)
+        scripts["foo"] = "echo {{ 2 + 2 }}"
+        scripts.get_script_command = MagicMock()
+        tests = [
+            {"enable_templates": True, "parse_help": True, "expected": True},
+            {"enable_templates": True, "parse_help": False, "expected": False},
+            {"enable_templates": False, "parse_help": True, "expected": False},
+            {"enable_templates": False, "parse_help": False, "expected": False},
+        ]
+        for test in tests:
+            with self.subTest(test=test):
+                settings.enable_templates = test["enable_templates"]
+                settings.parse_help = test["parse_help"]
+                scripts.get_script_help("foo")
+                scripts.get_script_command.assert_called_once_with("foo", parse=test["expected"])
+                scripts.get_script_command.reset_mock()
 
     @patch("uuid.uuid4", autospec=True)
     @patch("os.getenv", autospec=True)

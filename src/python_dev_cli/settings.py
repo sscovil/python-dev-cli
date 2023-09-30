@@ -8,11 +8,15 @@ class Settings:
 
     def __init__(self, **kwargs) -> None:
         self.enable_templates = kwargs.get("enable_templates", True)
+        self.parse_help = kwargs.get("parse_help", True)
         self.include = kwargs.get("include", None)
         self.script_refs = kwargs.get("script_refs", "dev")
 
     def __dir__(self) -> List[str]:
         return sorted([key for key in self.__dict__.keys()])
+
+    def __iter__(self):
+        return iter(self.__dict__.items())
 
     def __repr__(self):
         return self.__str__()
@@ -33,8 +37,19 @@ class Settings:
         return self._enable_templates
 
     @enable_templates.setter
-    def enable_templates(self, value: bool | int):
-        self._enable_templates = bool(value)
+    def enable_templates(self, value: bool | int | str):
+        self._enable_templates = self.cast_to_bool(value)
+
+    @property
+    def parse_help(self):
+        """Whether to parse scripts as a Jinja2 template when generating the CLI help page. Defaults to True. Set to
+        False if you want to use Jinja2 syntax in your scripts, but want the help page to display the unparsed commands.
+        """
+        return self._parse_help
+
+    @parse_help.setter
+    def parse_help(self, value: bool | int | str):
+        self._parse_help = self.cast_to_bool(value)
 
     @property
     def include(self):
@@ -65,6 +80,16 @@ class Settings:
     @script_refs.setter
     def script_refs(self, value: str):
         self._script_refs = str(value)
+
+    @staticmethod
+    def cast_to_bool(value: bool | int | str) -> bool:
+        """Returns a boolean value, based on the given value. If the value is a string, it is converted to lowercase
+        and checked against a list of strings that represent False. Otherwise, the value is simply cast to a boolean.
+
+        :param value: A boolean, integer, or string value.
+        :return: A boolean value.
+        """
+        return value.lower() not in ["false", "0", "no", ""] if isinstance(value, str) else bool(value)
 
     @staticmethod
     def from_config(config: Dict[str, Any] | None = None) -> "Settings":
